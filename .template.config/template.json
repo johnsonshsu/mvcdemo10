@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "xxxxxx",
+    "classifications": [
+        "C#",
+        "MVC"
+    ],
+    "identity": "mvc.demo.10.Template",
+    "name": "ASP.NET Core MVC C# 教學版 .net10.0",
+    "shortName": "mvcdemo10",
+    "sourceName": "mvcdemo10",
+    "tags": {
+        "language": "[C#]",
+        "type": "project"
+    }
+}

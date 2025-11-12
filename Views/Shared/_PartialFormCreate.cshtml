@@ -1,0 +1,11 @@
+@{
+    var formSecurity = SessionService.FormSecurity;
+    bool bln_valid = (formSecurity == null) ? false : formSecurity.IsAdd;
+    if (AppService.DebugMode) { bln_valid = true; }
+}
+@if (bln_valid)
+{
+    @Html.ActionLink(SessionService.GetActionName(enAction.Create), ActionService.Create, ActionService.Controller, new
+        { area = ActionService.Area }, new
+        { @class = "btn btn-primary" })
+}

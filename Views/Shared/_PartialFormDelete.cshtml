@@ -1,0 +1,10 @@
+@{
+    var formSecurity = SessionService.FormSecurity;
+    bool bln_valid = (formSecurity == null) ? false : formSecurity.IsDelete;
+    if (AppService.DebugMode) { bln_valid = true; }
+}
+@if (bln_valid)
+{
+    <input type="button" id="@ActionService.Delete" value="@SessionService.GetActionName(enAction.Delete)"
+        class="btn btn-danger" onclick="DeleteData(@ActionService.RowId , '@ActionService.RowData' )" />
+}

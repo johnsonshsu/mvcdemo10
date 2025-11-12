@@ -1,0 +1,20 @@
+﻿@{
+    var formSecurity = SessionService.FormSecurity;
+}
+@if (formSecurity.IsAdd || AppService.DebugMode)
+{
+    @Html.ActionLink(SessionService.GetActionName(enAction.Create), ActionService.CreateMaster, ActionService.Controller,
+        new { area = ActionService.Area },
+        new { @class = "btn btn-primary me-1" })
+}
+@if (formSecurity.IsEdit || AppService.DebugMode)
+{
+    @Html.ActionLink(SessionService.GetActionName(enAction.Edit), ActionService.EditMaster, ActionService.Controller,
+        new { area = ActionService.Area, id = ActionService.RowId },
+        new { @class = "btn btn-success" })
+}
+@if (formSecurity.IsDelete || AppService.DebugMode)
+{
+    <input type="button" id="@ActionService.DeleteMaster" value="@SessionService.GetActionName(enAction.Delete)"
+        class="btn btn-danger" onclick="DeleteData(@ActionService.RowId , '@ActionService.RowData' )" />
+}

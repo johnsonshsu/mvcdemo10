@@ -1,0 +1,11 @@
+@{
+    var formSecurity = SessionService.FormSecurity;
+    bool bln_valid = (formSecurity == null) ? false : formSecurity.IsEdit;
+    if (AppService.DebugMode) { bln_valid = true; }
+}
+@if (bln_valid)
+{
+    @Html.ActionLink(SessionService.GetActionName(enAction.Edit), ActionService.Edit, ActionService.Controller, new
+        { area = ActionService.Area, id = ActionService.RowId }, new
+        { @class = "btn btn-success" })
+}

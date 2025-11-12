@@ -1,0 +1,24 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@if (SessionService.IsMultiForm && SessionService.ActionNo != "List")
+{
+    int int_page_master = (SessionService.PageMaster <= 1) ? 1 : SessionService.PageMaster;
+    int int_page_detail = SessionService.PageDetail;
+    if (SessionService.PageDetail > 0)
+    {
+        <div class="float-start page-info me-2">明細頁數:</div>
+        <div class="float-start me-2">
+            @Html.PagedListPager((IPagedList)(Model.DetailModel), x => Url.Action(ActionService.Index,
+            ActionService.Controller, new
+            {
+                area = ActionService.Area,
+                pageMaster = int_page_master,
+                pageDetail = x
+            }))
+</div>
+<div class="float-start page-info">
+    @ViewBag.PageDetailInfo
+</div>
+}
+}

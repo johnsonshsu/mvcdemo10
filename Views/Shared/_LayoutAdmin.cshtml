@@ -1,0 +1,441 @@
+@{
+    ViewData["Title"] = "首頁";
+    string loginText = (SessionService.IsLogin) ? "登出系統" : "登入系統";
+    string userInfo = (SessionService.IsLogin) ? "登入者：" + SessionService.UserNo + " " + SessionService.UserName : "遊客";
+    string appInfo = $"{AppService.AppName}";
+    string cardSizeClass = (string.IsNullOrEmpty(SessionService.CardSize)) ? "card-size-max" : SessionService.CardSize;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ASP.NET MVC Core - Bootstrap 5 Responsive Admin">
+    <meta name="author" content="Johnson">
+    <meta name="keyword" content="ASP.NET MVC Core, Dashboard, Admin, Template, Theme, Bootstrap, Responsive">
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")">
+    <title>@appInfo - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="@Url.Content("~/lib/jqueryui/themes/base/jquery-ui.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap/dist/css/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap-icons/font/bootstrap-icons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/toastr.js/toastr.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/datepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/timepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/fontawesome/css/all.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/flag-icons/css/flag-icons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap-select/css/bootstrap-select.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/sweetalert2/sweetalert2.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/niceadmin/assets/css/style.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")"></script>
+    <script src="@Url.Content("~/lib/jqueryui/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/lib/Chart.js/chart.umd.min.js")"></script>
+    <script src="@Url.Content("~/lib/ckeditor5/ckeditor.js")"></script>
+    <script src="@Url.Content("~/lib/ckeditor5/translations/zh.min.js")"></script>
+    <script src="@Url.Content("~/lib/fontawesome/js/all.js")"></script>
+    <script src="@Url.Content("~/lib/moment.js/moment.min.js")"></script>
+    <script src="@Url.Content("~/lib/moment.js/locale/zh-tw.min.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/datepicker.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/datepicker-zh-TW.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/timepicker.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/timepicker-zh-TW.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/dist/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/dist/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/packages/core/locales-all.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/packages/bootstrap5/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/packages/google-calendar/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/sweetalert2/sweetalert2.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap-select/js/bootstrap-select.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap-select/js/i18n/defaults-zh_TW.min.js")"></script>
+    <script src="@Url.Content("~/lib/toastr.js/toastr.min.js")"></script>
+    <script src="@Url.Content("~/js/site.js")" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Updated: Apr 7 2025 with Bootstrap v5.3.5
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="logo d-flex align-items-center">
+                    <img src="assets/img/logo.png" alt="">
+                    <span class="d-none d-lg-block">@appInfo</span>
+                </a>
+                <i class="bi bi-list toggle-sidebar-btn"></i>
+            </div><!-- End Logo -->
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number">4</span>
+                        </a><!-- End Notification Icon -->
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                            <li class="dropdown-header">
+                                你有 4 個未讀通知
+                                <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                    <span class="badge rounded-pill bg-primary p-2 ms-2">顯示全部通知</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="notification-item">
+                                <i class="bi bi-exclamation-circle text-warning"></i>
+                                <div>
+                                    <h4>開會通知</h4>
+                                    <p>今天 14:00 請準時參加會議</p>
+                                    <p>30 分鐘前</p>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="notification-item">
+                                <i class="bi bi-x-circle text-danger"></i>
+                                <div>
+                                    <h4>休假通知</h4>
+                                    <p>明天排休，請勿上班</p>
+                                    <p>1 小時前</p>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="notification-item">
+                                <i class="bi bi-check-circle text-success"></i>
+                                <div>
+                                    <h4>客戶拜訪通知</h4>
+                                    <p>後天需要到台積電進行業務拜訪</p>
+                                    <p>2 小時前</p>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="notification-item">
+                                <i class="bi bi-info-circle text-primary"></i>
+                                <div>
+                                    <h4>業務上課通知</h4>
+                                    <p>到 101 會議室進行業務知識上課</p>
+                                    <p>4 小時前</p>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">顯示全部通知</a>
+                            </li>
+                        </ul><!-- End Notification Dropdown Items -->
+                    </li><!-- End Notification Nav -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span class="badge bg-success badge-number">3</span>
+                        </a><!-- End Messages Icon -->
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                            <li class="dropdown-header">
+                                您有 3 封未讀訊息
+                                <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })"><span
+                                        class="badge rounded-pill bg-primary p-2 ms-2">顯示全部訊息</span></a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="message-item">
+                                <a href="#">
+                                    <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>林小天</h4>
+                                        <p>請讀取我寄給你專業知識的電子郵件</p>
+                                        <p>4 小時前</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="message-item">
+                                <a href="#">
+                                    <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>楊小莉</h4>
+                                        <p>請連絡光華電子財務部林先生</p>
+                                        <p>6 小時前</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="message-item">
+                                <a href="#">
+                                    <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
+                                    <div>
+                                        <h4>陳小光</h4>
+                                        <p>請通知所有業務到會議室開會</p>
+                                        <p>8 小時前</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">顯示全部訊息</a>
+                            </li>
+                        </ul><!-- End Messages Dropdown Items -->
+                    </li><!-- End Messages Nav -->
+                    <li class="nav-item dropdown pe-3">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                            data-bs-toggle="dropdown">
+                            <img src="@Url.Content(SessionService.UserImage)" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">@userInfo</span>
+                        </a><!-- End Profile Iamge Icon -->
+                        @if (SessionService.IsLogin)
+                        {
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                <li class="dropdown-header">
+                                    <h6>王大明</h6>
+                                    <span>程式設計師</span>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                        <i class="bi bi-person"></i>
+                                        <span>我的帳號</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                        <i class="bi bi-gear"></i>
+                                        <span>重設密碼</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- End Profile Dropdown Items -->
+                        }
+                    </li><!-- End Profile Nav -->
+                    <li>
+                        <a class="nav-profile" href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                            <span class="pe-2">@loginText</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav><!-- End Icons Navigation -->
+        </header><!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        <aside id="sidebar" class="sidebar">
+            <ul class="sidebar-nav" id="sidebar-nav">
+                <li class="nav-item">
+                    <a class="nav-link " href="index.html">
+                        <i class="bi bi-grid fs-3"></i>
+                        <h5 class="pt-2">系統功能列表</h5>
+                    </a>
+                </li><!-- End Dashboard Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>BAS 基本資料模組</span><i
+                            class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P01 公司基本資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P02 員工基本資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P03 部門基本資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P04 職稱基本資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P05 商品基本資料維護</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Components Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-journal-text"></i><span>PUR 採購系統模組</span><i
+                            class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P01 部門請購資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P02 廠商採購資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P03 廠商進貨資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P04 廠商退貨資料維護</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Forms Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-layout-text-window-reverse"></i><span>SAL 銷售系統模組</span><i
+                            class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P01 客戶報價資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P02 客戶訂單資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P03 客戶銷貨資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P04 客戶退貨資料維護</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Tables Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-bar-chart"></i><span>INV 庫存系統模組</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P01 一般入庫資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P02 一般出庫資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P03 進貨入庫資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", controller: "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P04 銷貨出庫資料維護</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Charts Nav -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-gem"></i><span>FIN 財務系統模組</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P01 會計傳票資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P02 應收帳款資料維護</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">
+                                <i class="bi bi-circle"></i><span>P03 應付帳款資料維護</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Icons Nav -->
+            </ul>
+        </aside><!-- End Sidebar-->
+
+        <main id="main" class="main">
+            <div class="card border-secondary @cardSizeClass">
+                <div class="card-header bg-secondary text-white">
+                    <div class="float-start">
+                        <h5 style="margin-bottom: 0">@SessionService.PrgInfo</h5>
+                    </div>
+                    @if (!string.IsNullOrEmpty(SessionService.ActionName))
+                    {
+                        <div class="float-end">
+                            <h5 style="margin-bottom: 0">@SessionService.ActionName</h5>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(SessionService.SubActionName))
+                    {
+                        <div class="float-end ms-2">
+                            <h5 style="margin-bottom: 0">@SessionService.SubActionName</h5>
+                        </div>
+                    }
+                </div>
+                <div class="card-body m-1">
+                    @RenderBody()
+                    @if (SessionService.IsMultiForm)
+                    {
+                        <div class="row mx-1">
+                            <div class="col-md-12">
+                                @await Html.PartialAsync("_PartialFormPageDetail")
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </main><!-- End #main -->
+
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
+            <div class="copyright">
+                &copy; Copyright <strong><span>@AppService.Designer</span></strong>. 版權所有
+            </div>
+        </footer><!-- End Footer -->
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
+    </div>
+    <script src="@Url.Content("~/lib/niceadmin/assets/js/main.js")"></script>
+    @await RenderSectionAsync("ScriptsBody", required: false)
+    @await Html.PartialAsync("_PartialAlertMessage")
+</body>
+
+</html>
