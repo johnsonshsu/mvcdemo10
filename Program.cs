@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,14 +75,11 @@ builder.Services.AddDbContext<dbEntities>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
 #endregion
 
-#region OpenAPI 設定
-//builder.Services.AddOpenApi(options =>
-//{
-//    options.OpenApiVersion = OpenApiSpecVersion.OpenApi2_0;
-//});
-#endregion
-
 #region WebAPI 設定
+builder.Services.AddOpenApi(options =>
+{
+    options.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+});
 builder.Services.AddSingleton<JWTBase, JWTServices>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -193,6 +191,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// 重要：將 app.UseAuthentication 及 app.UseAuthorization 放在 app.UseRouting 之後
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -200,13 +199,11 @@ app.UseAuthorization();
 app.UseSession();
 #endregion
 
-#region OpenAPI 設定
-//app.MapOpenApi();
-#endregion
-
 #region WebAPI設定
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
+    app.MapScalarApiReference();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
